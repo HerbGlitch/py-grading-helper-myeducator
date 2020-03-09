@@ -3,7 +3,9 @@
 ## SETUP:
 
 **make sure python is added to your path.**
+
 git clone
+
 cd to root of this project
 
 **run (in cmd):**
