@@ -27,3 +27,14 @@ change this line in main.py:
 myeducator = MyEducator("Introduction to Python Data Analytics (BYU w20 S1)", "Python: Iterations")
 #                        ^-Course Name                                         ^-Chapter Name
 ```
+
+## Running
+**Remove the out file if you have one**
+
+**run (in cmd):**
+```
+python main.py
+```
+
+## Final Steps
+**Party!**
