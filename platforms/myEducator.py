@@ -3,6 +3,7 @@ import io
 import os
 from api.myEducator import myEducatorApiCalls
 from api.api import clean_json_request
+from decorations.progressbar import printProgressBar
 
 class MyEducator():
     def __init__(self, course = "", activity = ""):
@@ -34,17 +35,26 @@ class MyEducator():
 
     def get_all_activity_files(self):
         request = self.myApi.get_activity_by_id(self.activity_id)
-        # first = True
-        for key, value in clean_json_request(request, "userid", "submissionid").items():
+
+        user_and_submission = clean_json_request(request, "userid", "submissionid").items()
+
+        l = len(user_and_submission)
+        printProgressBar(0, l, prefix='Pulling Files:', suffix='Complete', length=50)
+        
+        for i, (key, value) in enumerate(user_and_submission):
             resp = self.myApi.get_submission(value)
             temp_file = zipfile.ZipFile(io.BytesIO(resp.content))
             for name in temp_file.infolist():
                 name.filename = str(key) + "." + name.filename.split(".")[-1]
                 temp_file.extract(name, "out/")
+            printProgressBar(i + 1, l, prefix='Pulling Files:', suffix='Complete', length=50)
         self.rename_out_files()
 
     def rename_out_files(self):
-        for temp_file in os.listdir("out"):
+        files = os.listdir("out")
+        l = len(files)
+        printProgressBar(0, l, prefix='Naming Files:', suffix='Complete', length=50)
+        for i, temp_file in enumerate(files):
             user_details = self.myApi.get_user_by_id(temp_file.split(".")[0]).json()
             os.rename("out/" + temp_file, "out/" + user_details["last_name"] + "," + user_details["first_name"] + "." + temp_file.split(".")[-1])
-
+            printProgressBar(i + 1, l, prefix='Naming Files:', suffix='Complete', length=50)
