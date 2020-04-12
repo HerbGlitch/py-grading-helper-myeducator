@@ -1,6 +1,7 @@
 import zipfile
 import io
 import os
+import shutil
 from api.myEducator import myEducatorApiCalls
 from api.api import clean_json_request
 from decorations.progressbar import printProgressBar
@@ -34,6 +35,7 @@ class MyEducator():
             print("class: \"" + self.course + "\" not found in class list")
 
     def get_all_activity_files(self):
+        shutil.rmtree("out")
         request = self.myApi.get_activity_by_id(self.activity_id)
 
         user_and_submission = clean_json_request(request, "userid", "submissionid").items()
